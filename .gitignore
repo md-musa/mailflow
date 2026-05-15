@@ -1,0 +1,13 @@
+# Global
+node_modules
+.env
+dist
+coverage
+*.log
+
+# OS
+.DS_Store
+
+# IDE
+.vscode
+.idea
