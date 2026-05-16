@@ -1,26 +1,43 @@
 import { Injectable } from '@nestjs/common';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class GroupsService {
-  create(createGroupDto: CreateGroupDto) {
-    return 'This action adds a new group';
+  constructor(private readonly prisma: PrismaService) { }
+
+  async create(createGroupDto: CreateGroupDto, userId: string) {
+    const group = await this.prisma.group.create({
+      data: {
+        ...createGroupDto,
+        createdById: userId
+      }
+    })
+
+    return group;
   }
 
-  findAll() {
-    return `This action returns all groups`;
+  async findAll() {
+    return await this.prisma.group.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} group`;
+  async findOne(id: string) {
+    return await this.prisma.group.findUnique({
+      where: { id }
+    })
   }
 
-  update(id: number, updateGroupDto: UpdateGroupDto) {
-    return `This action updates a #${id} group`;
+  async update(id: string, updateGroupDto: UpdateGroupDto) {
+    return await this.prisma.group.update({
+      where: { id },
+      data: updateGroupDto,
+    })
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} group`;
+  async remove(id: string) {
+    return await this.prisma.group.delete({
+      where: { id }
+    })
   }
 }
