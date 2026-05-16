@@ -1,0 +1,5 @@
+(generate sql): npx prisma migrate dev --name init
+client: npx prisma generate
+Primsa studio: npx prisma studio
+
+npx prisma migrate reset

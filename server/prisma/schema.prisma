@@ -1,0 +1,125 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String  @id @default(uuid())
+  name         String
+  email        String  @unique
+  password     String
+  refreshToken String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  campaigns Campaign[]
+  groups    Group[]
+
+  @@map("users")
+}
+
+model Group {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  description String?
+
+  createdById String
+  createdBy   User   @relation(fields: [createdById], references: [id])
+
+  contacts  Contact[]
+  campaigns CampaignGroup[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("groups")
+}
+
+model Contact {
+  id    String @id @default(uuid())
+  name  String
+  email String
+
+  groupId String
+  group   Group  @relation(fields: [groupId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([email, groupId])
+  @@map("contacts")
+}
+
+model Campaign {
+  id String @id @default(uuid())
+
+  subject String
+  body    String
+
+  status CampaignStatus @default(DRAFT)
+
+  scheduledAt DateTime?
+
+  createdById String
+  createdBy   User   @relation(fields: [createdById], references: [id])
+
+  groups    CampaignGroup[]
+  emailJobs EmailJob[]
+
+  createdAt DateTime @default(now())
+
+  @@map("campaigns")
+}
+
+model CampaignGroup {
+  campaignId String
+  groupId    String
+
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+  group    Group    @relation(fields: [groupId], references: [id])
+
+  @@id([campaignId, groupId])
+  @@map("campaign_groups")
+}
+
+model EmailJob {
+  id String @id @default(uuid())
+
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id])
+
+  recipientEmail String
+
+  status EmailStatus @default(PENDING)
+
+  attempts Int @default(0)
+
+  failedReason String?
+
+  sentAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@map("email_jobs")
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum EmailStatus {
+  PENDING
+  PROCESSING
+  SENT
+  FAILED
+}
