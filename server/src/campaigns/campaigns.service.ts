@@ -8,12 +8,35 @@ export class CampaignsService {
   constructor(private readonly prisma: PrismaService) { }
 
   async create(createCampaignDto: CreateCampaignDto, createdById: string) {
-    return this.prisma.campaign.create({
-      data: {
-        ...createCampaignDto,
+    const { groupIds } = createCampaignDto;
+
+    const groups = await this.prisma.group.findMany({
+      where: {
+        id: {
+          in: groupIds
+        },
         createdById
+      },
+      include: {
+        contacts: true
       }
-    })
+    });
+
+    const mails = groups.flatMap(group => group.contacts).map(contact => contact.email)
+
+    console.log(mails);
+    // filter duplicate email
+
+
+
+
+    return mails
+    // return this.prisma.campaign.create({
+    //   data: {
+    //     ...createCampaignDto,
+    //     createdById
+    //   }
+    // })
 
   }
 

@@ -1,4 +1,4 @@
-import { IsDate, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
+import { ArrayMinSize, IsArray, IsDate, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
 
 export class CreateCampaignDto {
     @IsNotEmpty()
@@ -16,4 +16,8 @@ export class CreateCampaignDto {
     @IsDate()
     scheduledAt?: Date
 
+    @IsArray()
+    @ArrayMinSize(1)
+    @IsString({ each: true })
+    groupIds!: string[];
 }

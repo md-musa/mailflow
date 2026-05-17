@@ -6,9 +6,11 @@ import { AuthModule } from './auth/auth.module';
 import { GroupsModule } from './groups/groups.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { CampaignsModule } from './campaigns/campaigns.module';
+import { MailModule } from './mail/mail.module';
+
 
 @Module({
-  imports: [PrismaModule, AuthModule, PrismaModule, GroupsModule, ContactsModule, CampaignsModule],
+  imports: [PrismaModule, AuthModule, PrismaModule, GroupsModule, ContactsModule, CampaignsModule, MailModule],
   controllers: [AppController],
   providers: [AppService],
 })
