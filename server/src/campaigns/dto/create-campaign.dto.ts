@@ -1,4 +1,4 @@
-import { ArrayMinSize, IsArray, IsDate, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
+import { ArrayMinSize, IsArray, IsDate, IsNotEmpty, IsOptional, IsString, IsUUID, MinLength } from "class-validator";
 
 export class CreateCampaignDto {
     @IsNotEmpty()

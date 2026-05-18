@@ -7,6 +7,18 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class MailService {
   constructor(private readonly prisma: PrismaService) { }
 
+  async sendEmail(data: { to: string, subject: string, html: string }) {
+    console.log(`🟢 Eamil is sending to ${data.to}`)
+
+    // return await this.prisma.emailJob.update({
+    //   where: { id },
+    //   data: {
+    //     status: "SENT",
+    //     sentAt: new Date()
+    //   }
+    // })
+  }
+
   async create(createMailDto: CreateMailDto) {
     return await this.prisma.emailJob.create({
       data: createMailDto
@@ -35,4 +47,5 @@ export class MailService {
       where: { id },
     })
   }
+
 }
