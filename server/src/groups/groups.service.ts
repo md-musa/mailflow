@@ -5,15 +5,15 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class GroupsService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(createGroupDto: CreateGroupDto, userId: string) {
     const group = await this.prisma.group.create({
       data: {
         ...createGroupDto,
-        createdById: userId
-      }
-    })
+        createdById: userId,
+      },
+    });
 
     return group;
   }
@@ -24,20 +24,20 @@ export class GroupsService {
 
   async findOne(id: string) {
     return await this.prisma.group.findUnique({
-      where: { id }
-    })
+      where: { id },
+    });
   }
 
   async update(id: string, updateGroupDto: UpdateGroupDto) {
     return await this.prisma.group.update({
       where: { id },
       data: updateGroupDto,
-    })
+    });
   }
 
   async remove(id: string) {
     return await this.prisma.group.delete({
-      where: { id }
-    })
+      where: { id },
+    });
   }
 }

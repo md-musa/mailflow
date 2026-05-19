@@ -5,12 +5,12 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ContactsService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(createContactDto: CreateContactDto) {
     const contact = await this.prisma.contact.create({
-      data: createContactDto
-    })
+      data: createContactDto,
+    });
     return contact;
   }
 
@@ -20,21 +20,20 @@ export class ContactsService {
 
   async findOne(id: string) {
     return await this.prisma.contact.findUnique({
-      where: { id }
-    })
+      where: { id },
+    });
   }
 
   async update(id: string, updateContactDto: UpdateContactDto) {
     return await this.prisma.contact.update({
       where: { id },
-      data: updateContactDto
-    })
+      data: updateContactDto,
+    });
   }
 
   async remove(id: string) {
     return await this.prisma.contact.delete({
-      where: { id }
-    })
-
+      where: { id },
+    });
   }
 }

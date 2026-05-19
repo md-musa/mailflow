@@ -1,12 +1,10 @@
 import * as bcrypt from 'bcrypt';
+import envConfig from 'src/config/env.config';
 
-export async function hashPassword(password: string) {
-    return bcrypt.hash(password, 10);
+export async function hashData(password: string) {
+  return bcrypt.hash(password, envConfig().bcrypt.saltRounds);
 }
 
-export async function comparePassword(
-    password: string,
-    hashedPassword: string,
-) {
-    return bcrypt.compare(password, hashedPassword);
+export async function compareHashedData(password: string, hashedPassword: string) {
+  return bcrypt.compare(password, hashedPassword);
 }

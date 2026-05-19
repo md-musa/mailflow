@@ -5,11 +5,11 @@ import { UpdateCampaignDto } from './dto/update-campaign.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('campaigns')
+@UseGuards(AuthGuard)
 export class CampaignsController {
-  constructor(private readonly campaignsService: CampaignsService) { }
+  constructor(private readonly campaignsService: CampaignsService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
   create(@Body() createCampaignDto: CreateCampaignDto, @Request() req) {
     const userId = req.user.sub;
     return this.campaignsService.create(createCampaignDto, userId);

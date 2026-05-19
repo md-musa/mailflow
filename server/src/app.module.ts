@@ -11,7 +11,6 @@ import { BullModule } from '@nestjs/bullmq';
 import { QueueModule } from './queue/queue.module';
 import { WorkersModule } from './workers/workers.module';
 
-
 @Module({
   imports: [
     PrismaModule,
@@ -27,4 +26,4 @@ import { WorkersModule } from './workers/workers.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

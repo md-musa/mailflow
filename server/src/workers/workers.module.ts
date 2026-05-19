@@ -15,4 +15,4 @@ import { PrismaModule } from 'src/prisma/prisma.module';
   controllers: [],
   providers: [EmailProcessor],
 })
-export class WorkersModule { }
+export class WorkersModule {}
