@@ -5,25 +5,21 @@ import { UpdateGroupDto } from './dto/update-group.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('groups')
+@UseGuards(AuthGuard)
 export class GroupsController {
-  constructor(private readonly groupsService: GroupsService) {}
+  constructor(private readonly groupsService: GroupsService) { }
 
-  @UseGuards(AuthGuard)
   @Post()
   create(@Body() createGroupDto: CreateGroupDto, @Request() req) {
     const userId = req.user.sub;
-    console.log(req.user);
-
     return this.groupsService.create(createGroupDto, userId);
   }
 
-  @UseGuards(AuthGuard)
   @Get()
   findAll() {
     return this.groupsService.findAll();
   }
 
-  @UseGuards(AuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.groupsService.findOne(id);
