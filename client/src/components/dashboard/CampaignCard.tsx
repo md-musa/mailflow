@@ -1,0 +1,72 @@
+import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
+import { Button } from "@/components/ui/button"
+
+type Props = {
+  subject: string
+  status: string
+  total: number
+  sent: number
+  failed: number
+  pending: number
+}
+
+export default function CampaignCard({
+  subject,
+  status,
+  total,
+  sent,
+  failed,
+  pending,
+}: Props) {
+  const progress = total > 0 ? Math.round((sent / total) * 100) : 0
+
+  return (
+    <Card className="rounded-3xl">
+      <CardContent className="space-y-5 p-6">
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="text-xl font-semibold">{subject}</h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Recipients: {total}
+            </p>
+          </div>
+          <Badge
+            variant={status === "COMPLETED" ? "default" : "secondary"}
+            className="rounded-full"
+          >
+            {status}
+          </Badge>
+        </div>
+
+        <div className="grid grid-cols-3 gap-4 text-sm">
+          <div>
+            <p className="text-muted-foreground">Sent</p>
+            <p className="font-semibold">{sent}</p>
+          </div>
+
+          <div>
+            <p className="text-muted-foreground">Failed</p>
+            <p className="font-semibold">{failed}</p>
+          </div>
+
+          <div>
+            <p className="text-muted-foreground">Pending</p>
+            <p className="font-semibold">{pending}</p>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Progress value={progress} />
+          <p className="text-xs text-muted-foreground">{progress}% completed</p>
+        </div>
+
+        <Button variant="outline" className="w-full rounded-xl">
+          {" "}
+          View Details{" "}
+        </Button>
+      </CardContent>
+    </Card>
+  )
+}

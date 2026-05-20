@@ -7,7 +7,7 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 @Controller('campaigns')
 @UseGuards(AuthGuard)
 export class CampaignsController {
-  constructor(private readonly campaignsService: CampaignsService) {}
+  constructor(private readonly campaignsService: CampaignsService) { }
 
   @Post()
   create(@Body() createCampaignDto: CreateCampaignDto, @Request() req) {
@@ -16,8 +16,8 @@ export class CampaignsController {
   }
 
   @Get()
-  findAll() {
-    return this.campaignsService.findAll();
+  findAll(@Request() req) {
+    return this.campaignsService.findAll(req.user.sub);
   }
 
   @Get(':id')

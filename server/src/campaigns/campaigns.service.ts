@@ -10,10 +10,10 @@ export class CampaignsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly queueService: QueueService
-  ) {}
+  ) { }
 
   async create(createCampaignDto: CreateCampaignDto, createdById: string) {
-    const { subject, body, groupIds, scheduledAt } = createCampaignDto;
+    const { subject, body, additionalEmails, groupIds, scheduledAt } = createCampaignDto;
 
     const campaign = await this.prisma.campaign.create({
       data: {
@@ -27,7 +27,7 @@ export class CampaignsService {
         },
 
         groups: {
-          create: groupIds.map((groupId) => ({
+          create: groupIds?.map((groupId) => ({
             group: {
               connect: {
                 id: groupId,
@@ -50,9 +50,10 @@ export class CampaignsService {
       },
     });
 
-    const emails = groups.flatMap((group) => group.contacts).map((contact) => contact.email);
-    const uniqueEmails = [...new Set(emails)];
+    const emailsOfGroups = groups.flatMap((group) => group.contacts).map((contact) => contact.email);
+    const uniqueEmails = [...new Set([...emailsOfGroups, ...additionalEmails])];
 
+    console.log(uniqueEmails);
     const emailJobs = await this.prisma.emailJob.createManyAndReturn({
       data: uniqueEmails.map((email) => ({
         campaignId: campaign.id,
@@ -63,7 +64,6 @@ export class CampaignsService {
     for (const job of emailJobs) {
       await this.queueService.addEmailJob(
         job.id,
-
         scheduledAt ? new Date(scheduledAt).getTime() - Date.now() : undefined
       );
     }
@@ -71,8 +71,10 @@ export class CampaignsService {
     return campaign;
   }
 
-  async findAll() {
-    return await this.prisma.campaign.findMany();
+  async findAll(cretorId: string) {
+    return await this.prisma.campaign.findMany({
+      where: { createdById: cretorId }
+    });
   }
 
   async findOne(id: string) {
