@@ -6,21 +6,18 @@ import { Button } from "@/components/ui/button"
 type Props = {
   subject: string
   status: string
-  total: number
-  sent: number
-  failed: number
-  pending: number
+  stats: {
+    TOTAL: number
+    SENT: number
+    FAILED: number
+    PENDING: number
+  }
 }
 
-export default function CampaignCard({
-  subject,
-  status,
-  total,
-  sent,
-  failed,
-  pending,
-}: Props) {
-  const progress = total > 0 ? Math.round((sent / total) * 100) : 0
+export default function CampaignCard({ subject, status, stats }: Props) {
+  const { TOTAL, SENT, FAILED, PENDING } = stats
+  console.log(stats)
+  const progress = TOTAL > 0 ? Math.round((SENT / TOTAL) * 100) : 0
 
   return (
     <Card className="rounded-3xl">
@@ -29,7 +26,7 @@ export default function CampaignCard({
           <div>
             <h3 className="text-xl font-semibold">{subject}</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              Recipients: {total}
+              Recipients: {TOTAL}
             </p>
           </div>
           <Badge
@@ -43,17 +40,17 @@ export default function CampaignCard({
         <div className="grid grid-cols-3 gap-4 text-sm">
           <div>
             <p className="text-muted-foreground">Sent</p>
-            <p className="font-semibold">{sent}</p>
+            <p className="font-semibold">{SENT}</p>
           </div>
 
           <div>
             <p className="text-muted-foreground">Failed</p>
-            <p className="font-semibold">{failed}</p>
+            <p className="font-semibold">{FAILED}</p>
           </div>
 
           <div>
             <p className="text-muted-foreground">Pending</p>
-            <p className="font-semibold">{pending}</p>
+            <p className="font-semibold">{PENDING}</p>
           </div>
         </div>
 
@@ -62,10 +59,10 @@ export default function CampaignCard({
           <p className="text-xs text-muted-foreground">{progress}% completed</p>
         </div>
 
-        <Button variant="outline" className="w-full rounded-xl">
+        {/* <Button variant="outline" className="w-full rounded-xl">
           {" "}
           View Details{" "}
-        </Button>
+        </Button> */}
       </CardContent>
     </Card>
   )

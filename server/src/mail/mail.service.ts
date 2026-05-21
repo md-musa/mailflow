@@ -5,18 +5,12 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class MailService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async sendEmail(data: { to: string; subject: string; html: string }) {
     console.log(`🟢 Eamil is sending to ${data.to}`);
 
-    // return await this.prisma.emailJob.update({
-    //   where: { id },
-    //   data: {
-    //     status: "SENT",
-    //     sentAt: new Date()
-    //   }
-    // })
+
   }
 
   async create(createMailDto: CreateMailDto) {

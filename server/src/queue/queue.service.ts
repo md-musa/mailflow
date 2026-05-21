@@ -4,9 +4,10 @@ import { Queue } from 'bullmq';
 
 @Injectable()
 export class QueueService {
-  constructor(@InjectQueue('email-queue') private readonly emailQueue: Queue) {}
+  constructor(@InjectQueue('email-queue') private readonly emailQueue: Queue) { }
 
   async addEmailJob(emailJobId: string, delay?: number) {
+
     await this.emailQueue.add(
       'send-email',
       {

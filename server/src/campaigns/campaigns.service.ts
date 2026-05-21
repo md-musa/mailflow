@@ -101,12 +101,13 @@ export class CampaignsService {
     });
 
 
-    const result = campaigns.map(campaign => {
+    const result: any = campaigns.map(campaign => {
       const counts = {
         TOTAL: campaign.emailJobs.length,
         SENT: 0,
         PROCESSING: 0,
         FAILED: 0,
+        PENDING: 0
       }
 
       campaign.emailJobs.forEach(emailJob => {
@@ -114,14 +115,26 @@ export class CampaignsService {
       });
 
       campaign['stats'] = counts
-      if (counts.PROCESSING === 0) campaign.status = "COMPLETED";
+      if (counts.PROCESSING === 0 && counts.PENDING === 0) campaign.status = "COMPLETED";
       const { emailJobs, ...rest } = campaign;
       return rest;
     })
 
-    return result;
+    const summary = {
+      totalCampaign: campaigns.length,
+      totalEmailSent: 0,
+      totalEmailFailed: 0,
+    }
+
+    result.forEach(campaign => {
+      summary.totalEmailSent += campaign.stats.SENT;
+      summary.totalEmailSent += campaign.stats.FAILED;
+    })
+
+    return { campaigns, summary }
 
   }
+
 
   async findOne(id: string) {
     return await this.prisma.campaign.findUnique({

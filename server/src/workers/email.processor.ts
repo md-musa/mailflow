@@ -33,6 +33,19 @@ export class EmailProcessor extends WorkerHost {
         subject: emailJob.campaign.subject,
         html: emailJob.campaign.body,
       });
+
+      await new Promise((resolve) => {
+        setTimeout(resolve, 2000);
+      });
+
+
+      await this.prisma.emailJob.update({
+        where: { id: emailJob.id },
+        data: {
+          status: "SENT",
+          sentAt: new Date()
+        }
+      })
     } catch (error: any) {
       await this.prisma.emailJob.update({
         where: { id: emailJob.id },
