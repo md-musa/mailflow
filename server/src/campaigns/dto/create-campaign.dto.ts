@@ -18,7 +18,8 @@ export class CreateCampaignDto {
   @IsArray()
   @IsString({ each: true })
   @ArrayMinSize(1)
-  additionalEmails!: string
+  @IsOptional()
+  additionalEmails?: string
 
   @IsArray()
   @IsOptional()

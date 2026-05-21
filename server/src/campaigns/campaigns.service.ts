@@ -1,9 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { QueueService } from 'src/queue/queue.service';
-import { EmailJob } from 'generated/prisma/client';
 
 @Injectable()
 export class CampaignsService {
@@ -13,47 +12,68 @@ export class CampaignsService {
   ) { }
 
   async create(createCampaignDto: CreateCampaignDto, createdById: string) {
-    const { subject, body, additionalEmails, groupIds, scheduledAt } = createCampaignDto;
+    const {
+      subject,
+      body,
+      additionalEmails = [],
+      groupIds = [],
+      scheduledAt,
+    } = createCampaignDto;
 
     const campaign = await this.prisma.campaign.create({
       data: {
         subject,
         body,
-        status: scheduledAt ? 'SCHEDULED' : 'PROCESSING',
+        status: scheduledAt
+          ? 'SCHEDULED'
+          : 'PROCESSING',
         scheduledAt,
 
         createdBy: {
-          connect: { id: createdById },
+          connect: {
+            id: createdById,
+          },
         },
 
-        groups: {
-          create: groupIds?.map((groupId) => ({
-            group: {
-              connect: {
-                id: groupId,
-              },
-            },
-          })),
-        },
+        ...(groupIds.length > 0 && {
+          groups: {
+            create: groupIds.map(
+              (groupId) => ({
+                group: {
+                  connect: {
+                    id: groupId,
+                  },
+                },
+              }),
+            ),
+          },
+        }),
       },
     });
 
-    const groups = await this.prisma.group.findMany({
-      where: {
-        id: {
-          in: groupIds,
-        },
-        createdById,
-      },
-      include: {
-        contacts: true,
-      },
-    });
+    let emailsOfGroups: string[] = [];
 
-    const emailsOfGroups = groups.flatMap((group) => group.contacts).map((contact) => contact.email);
+    if (groupIds.length > 0) {
+      const groups = await this.prisma.group.findMany({
+        where: {
+          id: { in: groupIds },
+          createdById,
+        },
+
+        include: {
+          contacts: true,
+        },
+      });
+
+      emailsOfGroups = groups.flatMap((group) => group.contacts).map((contact) => contact.email);
+    }
+
     const uniqueEmails = [...new Set([...emailsOfGroups, ...additionalEmails])];
 
-    console.log(uniqueEmails);
+    if (uniqueEmails.length === 0) {
+      throw new BadRequestException('No recipients found');
+    }
+
     const emailJobs = await this.prisma.emailJob.createManyAndReturn({
       data: uniqueEmails.map((email) => ({
         campaignId: campaign.id,
@@ -61,20 +81,46 @@ export class CampaignsService {
       })),
     });
 
-    for (const job of emailJobs) {
-      await this.queueService.addEmailJob(
+    const delay = scheduledAt ? new Date(scheduledAt).getTime() - Date.now() : undefined;
+    await Promise.all(
+      emailJobs.map((job) => this.queueService.addEmailJob(
         job.id,
-        scheduledAt ? new Date(scheduledAt).getTime() - Date.now() : undefined
-      );
-    }
+        delay,
+      ),
+      ),
+    );
 
     return campaign;
   }
 
-  async findAll(cretorId: string) {
-    return await this.prisma.campaign.findMany({
-      where: { createdById: cretorId }
+  async findAll(createdById: string) {
+    const campaigns = await this.prisma.campaign.findMany({
+      where: { createdById },
+      include: { emailJobs: true },
+      orderBy: { createdAt: 'desc' },
     });
+
+
+    const result = campaigns.map(campaign => {
+      const counts = {
+        TOTAL: campaign.emailJobs.length,
+        SENT: 0,
+        PROCESSING: 0,
+        FAILED: 0,
+      }
+
+      campaign.emailJobs.forEach(emailJob => {
+        counts[emailJob.status]++;
+      });
+
+      campaign['stats'] = counts
+      if (counts.PROCESSING === 0) campaign.status = "COMPLETED";
+      const { emailJobs, ...rest } = campaign;
+      return rest;
+    })
+
+    return result;
+
   }
 
   async findOne(id: string) {
