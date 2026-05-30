@@ -7,7 +7,6 @@
 **Queue-Based Bulk Email Delivery System**
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20App-4F46E5?style=for-the-badge)](<!-- ADD CLIENT URL -->)
-
 [![Demo Video](https://img.shields.io/badge/Demo%20Video-Watch-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](<!-- ADD VIDEO URL -->)
 
 </div>
@@ -60,13 +59,13 @@ The system allows users to create campaigns, select recipient groups, schedule f
 
 # 4. System Architecture
 
-![System Architecture](./assets/sad.svg)
+![System Architecture](./assets/sad.png)
 
 A high-level overview of the frontend, backend, queue system, Redis, workers, and email service.
 
 # 5. Email Processing Workflow
 
-![Workflow Diagram](./assets/wfd.svg)
+![Workflow Diagram](./assets/wfd.png)
 
 The workflow demonstrates how campaigns are transformed into individual email jobs and processed asynchronously through BullMQ workers.
 
@@ -158,6 +157,8 @@ MAIL_PROVIDER_API_KEY=
 VITE_API_URL=http://localhost:3000
 ```
 
+Note: Email sending (SMTP / provider integration) and Swagger UI are not implemented in this branch and are planned for a future update. `server/src/mail/mail.service.ts` contains a placeholder `sendEmail()` that must be implemented before sending real emails.
+
 - Set up the database:
 
 ```bash
@@ -187,11 +188,7 @@ npm run dev
 
 # 10. API Reference
 
-> Full Swagger documentation available at:
-
-```txt
-http://localhost:3000/api/docs
-```
+> Swagger documentation: coming soon (not enabled in this branch).
 
 ## Authentication
 
