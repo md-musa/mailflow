@@ -62,7 +62,7 @@ export default function AuthPage() {
           <h1 className="text-4xl font-bold tracking-tight">MailFlow</h1>
 
           <p className="mt-2 text-sm text-muted-foreground">
-            Queue-Based Bulk Email Delivery System
+            Organize your audience and send email campaigns with confidence.
           </p>
         </div>
 
@@ -85,7 +85,7 @@ export default function AuthPage() {
                   <h2 className="text-2xl font-bold">Welcome Back</h2>
 
                   <p className="text-sm text-muted-foreground">
-                    Login to manage your email campaigns.
+                    Log in to access your campaigns, lists, and reporting.
                   </p>
                 </div>
 
@@ -95,7 +95,7 @@ export default function AuthPage() {
 
                     <Input
                       type="email"
-                      placeholder="john@example.com"
+                      placeholder="abc@gmail.com"
                       className="h-11 rounded-xl"
                       value={loginData.email}
                       onChange={(e) =>
@@ -140,7 +140,7 @@ export default function AuthPage() {
                   <h2 className="text-2xl font-bold">Create Account</h2>
 
                   <p className="text-sm text-muted-foreground">
-                    Start sending bulk email campaigns.
+                    Create an account and start building your contact lists.
                   </p>
                 </div>
 
@@ -150,7 +150,7 @@ export default function AuthPage() {
 
                     <Input
                       type="text"
-                      placeholder="John Doe"
+                      placeholder="Mr. Hasan"
                       className="h-11 rounded-xl"
                       value={registerData.name}
                       onChange={(e) =>
@@ -167,7 +167,7 @@ export default function AuthPage() {
 
                     <Input
                       type="email"
-                      placeholder="john@example.com"
+                      placeholder="abc@gmail.com"
                       className="h-11 rounded-xl"
                       value={registerData.email}
                       onChange={(e) =>

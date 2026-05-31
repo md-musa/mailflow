@@ -10,13 +10,13 @@ export default function DashboardHeader({ setOpenCampaignModal }: Props) {
       <div className="rounded-3xl border bg-white p-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h2 className="text-4xl font-bold tracking-tight">
-              Email Campaign Dashboard
+            <h2 className="text-3xl font-bold tracking-tight">
+              Campaigns made easy
             </h2>
 
             <p className="mt-3 max-w-2xl text-muted-foreground">
-              Send campaigns using asynchronous queue processing powered by
-              BullMQ and Redis.
+              Build email campaigns, track recipients, and keep your contact
+              groups organized.
             </p>
           </div>
 

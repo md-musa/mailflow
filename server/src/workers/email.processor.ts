@@ -35,7 +35,7 @@ export class EmailProcessor extends WorkerHost {
       });
 
       await new Promise((resolve) => {
-        setTimeout(resolve, 2000);
+        setTimeout(resolve, 100);
       });
 
 

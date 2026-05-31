@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class GroupsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async create(createGroupDto: CreateGroupDto, userId: string) {
     const group = await this.prisma.group.create({
@@ -19,12 +19,19 @@ export class GroupsService {
   }
 
   async findAll() {
-    return await this.prisma.group.findMany();
+    return await this.prisma.group.findMany({
+      include: {
+        contacts: true,
+      },
+    });
   }
 
   async findOne(id: string) {
     return await this.prisma.group.findUnique({
       where: { id },
+      include: {
+        contacts: true,
+      },
     });
   }
 

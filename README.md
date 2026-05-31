@@ -7,7 +7,8 @@
 **Queue-Based Bulk Email Delivery System**
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20App-4F46E5?style=for-the-badge)](<!-- ADD CLIENT URL -->)
-[![Demo Video](https://img.shields.io/badge/Demo%20Video-Watch-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](<!-- ADD VIDEO URL -->)
+
+<!-- [![Demo Video](https://img.shields.io/badge/Demo%20Video-Watch-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](ADD VIDEO URL) -->
 
 </div>
 
@@ -53,9 +54,9 @@ The system allows users to create campaigns, select recipient groups, schedule f
 
 # 3. Tech Stack
 
-#### Client: TypeScript, React, TailwindCSS, Shadcn/ui, Axios
+**Client:** TypeScript, React, TailwindCSS, Shadcn/ui, Axios
 
-#### Server: NestJS, PostgreSQL, Prisma ORM, BullMQ, Redis, JWT Authentication
+**Server:** NestJS, PostgreSQL, Prisma ORM, BullMQ, Redis, JWT Authentication
 
 # 4. System Architecture
 
@@ -71,25 +72,21 @@ The workflow demonstrates how campaigns are transformed into individual email jo
 
 # 6. Database Models
 
-![Workflow Diagram](./assets/er.png)
+![Er-diagram](./assets/er.png)
 
 # 7. Screenshots
 
 ## 7.1 Dashboard
 
-<!-- ADD DASHBOARD SCREENSHOT -->
+![Dashboard](./assets/dashboard.png)
 
----
+## 7.2 Grapups Management
 
-## 7.2 Create Campaign Modal
+![groups](./assets/groups.png)
 
-<!-- ADD MODAL SCREENSHOT -->
+## 7.3 Create Campaign and Progress Tracking
 
----
-
-## 7.3 Campaign Progress Tracking
-
-<!-- ADD CAMPAIGN PROGRESS SCREENSHOT -->
+![campaign-creation](./assets/mail.gif)
 
 # 8. Project Structure
 

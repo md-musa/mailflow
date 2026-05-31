@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import {
   Dialog,
@@ -11,53 +11,53 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { api } from "@/api/axios"
 import { toast } from "sonner"
 import { createCampaign } from "@/api/campaign.api"
+import { fetchGroups } from "@/api/group.api"
+import { Checkbox } from "../ui/checkbox"
+import type { GroupItem } from "@/types/group.type"
 
 type Props = {
   openCampaignModal: boolean
   setOpenCampaignModal(openCampaignModal: boolean): void
 }
 
-const groups = [
-  {
-    id: "1",
-    name: "CSE Students",
-  },
-
-  {
-    id: "2",
-    name: "Teachers",
-  },
-
-  {
-    id: "3",
-    name: "Club Members",
-  },
-]
-
 export default function CreateCampaignDialog({
   openCampaignModal,
   setOpenCampaignModal,
 }: Props) {
   const [loading, setLoading] = useState(false)
+  const [groups, setGroups] = useState<GroupItem[]>([])
 
   const [subject, setSubject] = useState("")
   const [body, setBody] = useState("")
-  const [additionalEmails, setAdditionalEmails] = useState("")
   const [scheduledAt, setScheduledAt] = useState("")
   const [selectedGroups, setSelectedGroups] = useState<string[]>([])
 
-  //   const handleGroupSelect = (groupId: string) => {
-  //     setSelectedGroups((prev) => {
-  //       if (prev.includes(groupId)) {
-  //         return prev.filter((id) => id !== groupId)
-  //       }
+  const loadGroups = async () => {
+    try {
+      const result = await fetchGroups()
+      setGroups(result || [])
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Unable to load groups")
+    }
+  }
 
-  //       return [...prev, groupId]
-  //     })
-  //   }
+  useEffect(() => {
+    if (openCampaignModal) {
+      loadGroups()
+    }
+  }, [openCampaignModal])
+
+  const handleGroupSelect = (groupId: string) => {
+    setSelectedGroups((prev) => {
+      if (prev.includes(groupId)) {
+        return prev.filter((id) => id !== groupId)
+      }
+
+      return [...prev, groupId]
+    })
+  }
 
   const handleCreateCampaign = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -65,16 +65,11 @@ export default function CreateCampaignDialog({
     try {
       setLoading(true)
 
-      const emails = additionalEmails
-        .split(",")
-        .map((email) => email.trim())
-        .filter(Boolean)
-
       const payload = {
         subject,
         body,
-        additionalEmails: emails,
         scheduledAt: scheduledAt || null,
+        groupIds: selectedGroups,
       }
 
       await createCampaign(payload)
@@ -84,7 +79,6 @@ export default function CreateCampaignDialog({
       // reset form
       setSubject("")
       setBody("")
-      setAdditionalEmails("")
       setScheduledAt("")
       setSelectedGroups([])
     } catch (error: any) {
@@ -102,7 +96,7 @@ export default function CreateCampaignDialog({
             <DialogTitle className="text-2xl">Create Campaign</DialogTitle>
 
             <DialogDescription>
-              Send emails to campaign recipients.
+              Select one or more groups and send a clear campaign message.
             </DialogDescription>
           </DialogHeader>
 
@@ -131,14 +125,14 @@ export default function CreateCampaignDialog({
             </div>
 
             {/* Groups */}
-            {/* <div className="space-y-3">
+            <div className="space-y-3">
               <label className="text-sm font-medium">Select Groups</label>
 
               <div className="grid grid-cols-2 gap-3">
                 {groups.map((group) => (
                   <div
                     key={group.id}
-                    className="flex items-center space-x-3 rounded-2xl border p-4"
+                    className="flex items-center space-x-3 rounded-xl border px-4 py-3"
                   >
                     <Checkbox
                       checked={selectedGroups.includes(group.id)}
@@ -149,22 +143,6 @@ export default function CreateCampaignDialog({
                   </div>
                 ))}
               </div>
-            </div> */}
-
-            {/* Additional Emails */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium"> Emails</label>
-
-              <Input
-                value={additionalEmails}
-                onChange={(e) => setAdditionalEmails(e.target.value)}
-                placeholder="abc@gmail.com, xyz@gmail.com"
-                className="h-11 rounded-xl"
-              />
-
-              <p className="text-xs text-muted-foreground">
-                Separate multiple emails with commas.
-              </p>
             </div>
 
             {/* Schedule */}

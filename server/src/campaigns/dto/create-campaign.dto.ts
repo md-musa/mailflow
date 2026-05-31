@@ -25,5 +25,5 @@ export class CreateCampaignDto {
   @IsOptional()
   @ArrayMinSize(1)
   @IsString({ each: true })
-  groupIds?: string[];
+  groupIds!: string[];
 }
