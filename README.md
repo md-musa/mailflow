@@ -4,7 +4,7 @@
 
 # MailFlow
 
-**Queue-Based Bulk Email Delivery System**
+**Scalable Queue-Based Email Delivery and Campaign Management System**
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20App-4F46E5?style=for-the-badge)](<!-- ADD CLIENT URL -->)
 
@@ -31,26 +31,26 @@
 
 # 1. Overview
 
-MailFlow is a queue-based bulk email delivery platform built to explore scalable backend architecture and asynchronous job processing.
+MailFlow is a queue-based bulk email delivery system designed to send emails reliably and efficiently at scale. Instead of processing emails directly within HTTP requests, the system uses a job queue (BullMQ + Redis) to offload email sending to background workers, ensuring fast API responses and stable performance.
 
-Instead of sending thousands of emails within a single HTTP request, MailFlow creates individual email jobs, pushes them into a BullMQ queue, and processes them through background workers. This ensures the API remains responsive while email delivery is handled independently.
+Users can create email campaigns, organize recipients into groups, add custom recipients, and schedule emails for later delivery. Each campaign is broken down into individual email jobs, which are processed asynchronously and tracked through states such as pending, processing, sent, and failed.
 
-The system allows users to create campaigns, select recipient groups, schedule future deliveries, and monitor delivery progress through a real-time dashboard.
+The project is built to demonstrate real-world backend engineering concepts including asynchronous processing, queue-based architecture, worker systems, and scalable system design.
 
 # 2. Features
 
-| #   | Feature               | Description                                        |
-| --- | --------------------- | -------------------------------------------------- |
-| 1   | Authentication        | JWT-based authentication with protected routes     |
-| 2   | Campaign Management   | Create and manage email campaigns                  |
-| 3   | Group-Based Sending   | Send emails to multiple recipient groups           |
-| 4   | Additional Recipients | Add custom recipients manually                     |
-| 5   | Queue Processing      | Background email processing using BullMQ           |
-| 6   | Scheduled Delivery    | Schedule campaigns for future execution            |
-| 7   | Email Tracking        | Track sent, failed, pending, and processing emails |
-| 8   | Progress Monitoring   | View campaign delivery progress in real time       |
-| 9   | Dashboard UI          | Clean SaaS-style dashboard                         |
-| 10  | Responsive Design     | Mobile and desktop friendly                        |
+| #   | Feature                    | Description                                                             |
+| --- | -------------------------- | ----------------------------------------------------------------------- |
+| 1   | Authentication             | JWT-based authentication with refresh token support                     |
+| 2   | Campaign Management        | Create, update, schedule, and manage email campaigns                    |
+| 3   | Group & Contact Management | Organize recipients into groups and manage contacts                     |
+| 4   | Bulk Email Processing      | Queue-based asynchronous email processing using BullMQ                  |
+| 5   | Background Workers         | Dedicated workers for processing and sending emails                     |
+| 6   | Scheduled Email Delivery   | Schedule campaigns for future execution using delayed jobs              |
+| 7   | Email Status Tracking      | Track email states: pending, processing, sent, failed                   |
+| 8   | Progress Monitoring        | Monitor campaign delivery progress in real time                         |
+| 9   | Retry Mechanism            | Automatic retry handling for failed email deliveries                    |
+| 10  | Scalable Architecture      | Built with queue-based design for handling high-volume email processing |
 
 # 3. Tech Stack
 
@@ -80,7 +80,7 @@ The workflow demonstrates how campaigns are transformed into individual email jo
 
 ![Dashboard](./assets/dashboard.png)
 
-## 7.2 Grapups Management
+## 7.2 Groups Management
 
 ![groups](./assets/groups.png)
 
@@ -120,6 +120,8 @@ mailflow/
 # 9. Installation & Setup
 
 - Prerequisites: Node.js v18+, PostgreSQL, Redis.
+- This repository uses `server/` for the backend and `client/` for the frontend.
+
 - Clone repository and install dependencies:
 
 ```bash
@@ -138,23 +140,13 @@ cd server
 cp .env.example .env
 ```
 
-```env
-NODE_ENV=development
-DATABASE_URL=
-JWT_ACCESS_SECRET=
-JWT_REFRESH_SECRET=
-REDIS_HOST=localhost
-REDIS_PORT=6379
-MAIL_PROVIDER_API_KEY=
-```
+- Update `server/.env` using the example values in `server/.env.example`.
 
 - Configure frontend environment variables:
 
 ```env
 VITE_API_URL=http://localhost:3000
 ```
-
-Note: Email sending (SMTP / provider integration) and Swagger UI are not implemented in this branch and are planned for a future update. `server/src/mail/mail.service.ts` contains a placeholder `sendEmail()` that must be implemented before sending real emails.
 
 - Set up the database:
 
@@ -185,15 +177,14 @@ npm run dev
 
 # 10. API Reference
 
-> Swagger documentation: coming soon (not enabled in this branch).
-
 ## Authentication
 
-| Method | Endpoint            | Description          |
-| ------ | ------------------- | -------------------- |
-| POST   | /auth/register      | Register a new user  |
-| POST   | /auth/login         | Login user           |
-| POST   | /auth/refresh-token | Refresh access token |
+| Method | Endpoint       | Description                  |
+| ------ | -------------- | ---------------------------- |
+| POST   | /auth/register | Register a new user          |
+| POST   | /auth/login    | Login user                   |
+| POST   | /auth/refresh  | Refresh access token         |
+| POST   | /auth/logout   | Logout user and clear cookie |
 
 ## Groups
 
@@ -202,6 +193,7 @@ npm run dev
 | POST   | /groups     | Create group      |
 | GET    | /groups     | Get all groups    |
 | GET    | /groups/:id | Get group details |
+| PATCH  | /groups/:id | Update group      |
 | DELETE | /groups/:id | Delete group      |
 
 ## Contacts
@@ -210,6 +202,8 @@ npm run dev
 | ------ | ------------- | -------------- |
 | POST   | /contacts     | Create contact |
 | GET    | /contacts     | Get contacts   |
+| GET    | /contacts/:id | Get contact    |
+| PATCH  | /contacts/:id | Update contact |
 | DELETE | /contacts/:id | Delete contact |
 
 ## Campaigns
@@ -219,24 +213,25 @@ npm run dev
 | POST   | /campaigns     | Create campaign      |
 | GET    | /campaigns     | Get campaigns        |
 | GET    | /campaigns/:id | Get campaign details |
+| PATCH  | /campaigns/:id | Update campaign      |
+| DELETE | /campaigns/:id | Delete campaign      |
+
+## Mail / Email Jobs
+
+| Method | Endpoint  | Description          |
+| ------ | --------- | -------------------- |
+| POST   | /mail     | Create mail job      |
+| GET    | /mail     | Get mail jobs        |
+| GET    | /mail/:id | Get mail job details |
+| PATCH  | /mail/:id | Update mail job      |
+| DELETE | /mail/:id | Delete mail job      |
 
 # 11. Deployment
 
-### Frontend
-
-<!-- ADD FRONTEND URL -->
-
-### Backend
-
-<!-- ADD BACKEND URL -->
-
-### Database
-
-PostgreSQL
-
-### Queue Infrastructure
-
-Redis + BullMQ
+- Frontend: Deployed on Netlify (React build with Vite)
+- Backend: Deployed on Railway (NestJS API + workers)
+- Queue (Redis): Railway Redis or Upstash Redis for BullMQ job processing
+- Database: Railway PostgreSQL
 
 # 12. Challenges
 
@@ -261,12 +256,9 @@ Redis + BullMQ
 # 14. Future Improvements
 
 - [ ] CSV contact import
-- [ ] Email templates
-- [ ] Retry failed emails automatically
 - [ ] Campaign analytics dashboard
 - [ ] WebSocket live updates
 - [ ] Multi-organization support
-- [ ] Email open and click tracking
 
 <div align="center">
 
