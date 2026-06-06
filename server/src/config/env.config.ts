@@ -21,5 +21,10 @@ export default () => ({
     brevo: {
         apiKey: process.env.BREVO_API_KEY as string,
         senderEmail: process.env.BREVO_SENDER_EMAIL as string,
+    },
+    redis: {
+        host: process.env.REDIS_HOST as string,
+        port: parseInt(process.env.REDIS_PORT as string),
+        password: process.env.REDIS_PASSWORD as string,
     }
 });
