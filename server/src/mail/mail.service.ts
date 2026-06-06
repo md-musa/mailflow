@@ -25,15 +25,10 @@ export class MailService {
       },
     });
 
-    console.log('🟢 Ethereal test account created');
-    console.log(`   user: ${testAccount.user}`);
-    console.log(`   pass: ${testAccount.pass}`);
-
     return this.transporter;
   }
 
   async sendEmail(data: { to: string; subject: string; html: string }) {
-    // console.log(`🟢 Email is sending to ${data.to}`);
     const { to, subject, html } = data;
 
     try {
@@ -46,7 +41,6 @@ export class MailService {
       });
 
       const previewUrl = nodemailer.getTestMessageUrl(info);
-      // console.log(`✅ Email sent. Preview URL: ${previewUrl}`);
 
       return { messageId: info.messageId, previewUrl };
     } catch (error: any) {
