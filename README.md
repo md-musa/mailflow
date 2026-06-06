@@ -196,15 +196,6 @@ npm run dev
 | PATCH  | /groups/:id | Update group      |
 | DELETE | /groups/:id | Delete group      |
 
-## Contacts
-
-| Method | Endpoint      | Description    |
-| ------ | ------------- | -------------- |
-| POST   | /contacts     | Create contact |
-| GET    | /contacts     | Get contacts   |
-| GET    | /contacts/:id | Get contact    |
-| PATCH  | /contacts/:id | Update contact |
-| DELETE | /contacts/:id | Delete contact |
 
 ## Campaigns
 
@@ -215,16 +206,6 @@ npm run dev
 | GET    | /campaigns/:id | Get campaign details |
 | PATCH  | /campaigns/:id | Update campaign      |
 | DELETE | /campaigns/:id | Delete campaign      |
-
-## Mail / Email Jobs
-
-| Method | Endpoint  | Description          |
-| ------ | --------- | -------------------- |
-| POST   | /mail     | Create mail job      |
-| GET    | /mail     | Get mail jobs        |
-| GET    | /mail/:id | Get mail job details |
-| PATCH  | /mail/:id | Update mail job      |
-| DELETE | /mail/:id | Delete mail job      |
 
 # 11. Deployment
 
