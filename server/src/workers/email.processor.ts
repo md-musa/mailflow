@@ -28,16 +28,12 @@ export class EmailProcessor extends WorkerHost {
         data: { status: 'PROCESSING' },
       });
 
+      // Send email
       await this.mailService.sendEmail({
         to: emailJob.recipientEmail,
         subject: emailJob.campaign.subject,
         html: emailJob.campaign.body,
       });
-
-      await new Promise((resolve) => {
-        setTimeout(resolve, 100);
-      });
-
 
       await this.prisma.emailJob.update({
         where: { id: emailJob.id },

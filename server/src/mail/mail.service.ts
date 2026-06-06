@@ -1,16 +1,39 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { CreateMailDto } from './dto/create-mail.dto';
 import { UpdateMailDto } from './dto/update-mail.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import envConfig from 'src/config/env.config';
+import axios from 'axios';
 
 @Injectable()
 export class MailService {
   constructor(private readonly prisma: PrismaService) { }
 
   async sendEmail(data: { to: string; subject: string; html: string }) {
-    console.log(`🟢 Eamil is sending to ${data.to}`);
+    console.log(`🟢 Email is sending to ${data.to}`);
+    const { to, subject, html } = data;
 
+    try {
+      await axios.post(
+        "https://api.brevo.com/v3/smtp/email",
+        {
+          sender: { email: envConfig().brevo.senderEmail, name: "MailFlow" },
+          to: [{ email: to }],
+          subject,
+          htmlContent: html,
+        },
+        {
+          headers: {
+            "api-key": envConfig().brevo.apiKey || "",
+            "Content-Type": "application/json",
+          },
+        },
+      );
 
+    } catch (error: any) {
+      console.error("Failed to send email via Brevo API:", error.response?.data || error.message);
+      throw new UnprocessableEntityException(error.response?.data || error.message);
+    }
   }
 
   async create(createMailDto: CreateMailDto) {

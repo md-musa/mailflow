@@ -1,4 +1,3 @@
-import { JwtSignOptions } from "@nestjs/jwt";
 
 export default () => ({
     port: parseInt(process.env.PORT as string),
@@ -18,4 +17,9 @@ export default () => ({
         secret: process.env.BCRYPT_SECRET as string,
         saltRounds: parseInt(process.env.BCRYPT_SALT_ROUNDS as string)
     },
+
+    brevo: {
+        apiKey: process.env.BREVO_API_KEY as string,
+        senderEmail: process.env.BREVO_SENDER_EMAIL as string,
+    }
 });
