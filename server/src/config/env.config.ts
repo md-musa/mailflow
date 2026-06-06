@@ -18,9 +18,8 @@ export default () => ({
         saltRounds: parseInt(process.env.BCRYPT_SALT_ROUNDS as string)
     },
 
-    brevo: {
-        apiKey: process.env.BREVO_API_KEY as string,
-        senderEmail: process.env.BREVO_SENDER_EMAIL as string,
+    mail: {
+        from: process.env.MAIL_FROM as string,
     },
     redis: {
         host: process.env.REDIS_HOST as string,

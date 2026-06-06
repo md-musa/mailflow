@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 
 export default function Navbar() {
@@ -12,6 +12,12 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-3">
+          <Link to="/email-jobs">
+            <Button variant="outline" className="rounded-xl">
+              Inbox
+            </Button>
+          </Link>
+
           <Link to="/groups">
             <Button variant="outline" className="rounded-xl">
               Groups

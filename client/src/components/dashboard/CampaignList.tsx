@@ -1,7 +1,11 @@
+import type { CampaignItem } from "@/types/campaign.type"
 import CampaignCard from "./CampaignCard"
 
-export default function CampaignList(data: any) {
-  console.log(data.data)
+type Props = {
+  data?: CampaignItem[]
+}
+
+export default function CampaignList({ data }: Props) {
   return (
     <section className="mx-auto max-w-7xl px-6 pb-10">
       <div className="mb-6">
@@ -12,7 +16,7 @@ export default function CampaignList(data: any) {
       </div>
 
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {data.data?.map((item) => (
+        {data?.map((item) => (
           <CampaignCard key={item.id} {...item} />
         ))}
       </div>

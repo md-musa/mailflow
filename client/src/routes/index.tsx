@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 import AuthPage from "@/pages/AuthPage"
 import DashboardPage from "@/pages/DashboardPage"
+import EmailJobsPage from "@/pages/EmailJobsPage"
 import GroupsPage from "@/pages/GroupsPage"
 
 import PrivateRoute from "./PrivateRoute"
@@ -36,6 +37,15 @@ export default function AppRoutes() {
           element={
             <PrivateRoute>
               <GroupsPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/email-jobs"
+          element={
+            <PrivateRoute>
+              <EmailJobsPage />
             </PrivateRoute>
           }
         />

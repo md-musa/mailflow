@@ -1,4 +1,4 @@
-import type { CampaignPayload } from "@/types/campaign.type";
+import type { CampaignListResponse, CampaignPayload } from "@/types/campaign.type";
 import { api } from "./axios";
 
 
@@ -9,7 +9,7 @@ export const createCampaign = async (payload: CampaignPayload) => {
 };
 
 export const fetchCampaigns = async () => {
-    const response = await api.get<CampaignPayload>('/campaigns');
+    const response = await api.get<CampaignListResponse>('/campaigns');
     return response.data;
 };
 

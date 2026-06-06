@@ -100,6 +100,7 @@ model EmailJob {
   attempts Int @default(0)
 
   failedReason String?
+  previewUrl   String?
 
   sentAt DateTime?
 

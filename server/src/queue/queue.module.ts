@@ -3,6 +3,7 @@ import { QueueService } from './queue.service';
 import { BullModule } from '@nestjs/bullmq';
 import envConfig from 'src/config/env.config';
 
+console.log(envConfig().redis.host, envConfig().redis.port, envConfig().redis.password, "-----")
 @Module({
   imports: [
     BullModule.forRoot({

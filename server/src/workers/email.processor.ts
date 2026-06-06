@@ -29,17 +29,21 @@ export class EmailProcessor extends WorkerHost {
       });
 
       // Send email
-      await this.mailService.sendEmail({
+      const sendResult = await this.mailService.sendEmail({
         to: emailJob.recipientEmail,
         subject: emailJob.campaign.subject,
         html: emailJob.campaign.body,
       });
 
+      const previewUrl = typeof sendResult.previewUrl === 'string' ? sendResult.previewUrl : null;
+
+
       await this.prisma.emailJob.update({
         where: { id: emailJob.id },
         data: {
           status: "SENT",
-          sentAt: new Date()
+          sentAt: new Date(),
+          previewUrl,
         }
       })
     } catch (error: any) {
@@ -57,3 +61,4 @@ export class EmailProcessor extends WorkerHost {
     }
   }
 }
+

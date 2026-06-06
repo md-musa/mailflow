@@ -1,7 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { Button } from "@/components/ui/button"
 
 type Props = {
   subject: string
@@ -16,7 +15,6 @@ type Props = {
 
 export default function CampaignCard({ subject, status, stats }: Props) {
   const { TOTAL, SENT, FAILED, PENDING } = stats
-  console.log(stats)
   const progress = TOTAL > 0 ? Math.round((SENT / TOTAL) * 100) : 0
 
   return (

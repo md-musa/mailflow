@@ -1,8 +1,17 @@
+import dotenv from 'dotenv';
+import path from 'path';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import 'dotenv/config';
 import { ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
+
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
+const envPath = path.resolve(process.cwd(), envFile);
+const result = dotenv.config({ path: envPath });
+if (result.error) {
+  dotenv.config();
+}
+console.log(`✅ Loaded environment variables from ${envPath}`);
+const { AppModule } = require('./app.module');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
