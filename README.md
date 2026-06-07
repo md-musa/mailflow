@@ -6,7 +6,7 @@
 
 **Scalable Queue-Based Email Delivery and Campaign Management System**
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20App-4F46E5?style=for-the-badge)](<!-- ADD CLIENT URL -->)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20App-4F46E5?style=for-the-badge)](https://astonishing-sable-66ee15.netlify.app/)
 
 <!-- [![Demo Video](https://img.shields.io/badge/Demo%20Video-Watch-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](ADD VIDEO URL) -->
 
