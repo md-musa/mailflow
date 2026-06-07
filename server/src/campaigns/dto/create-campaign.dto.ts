@@ -1,4 +1,5 @@
 import { ArrayMinSize, IsArray, IsDate, IsEmail, IsNotEmpty, IsOptional, IsString, IsUUID, MinLength } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateCampaignDto {
   @IsNotEmpty()
@@ -12,8 +13,9 @@ export class CreateCampaignDto {
   body!: string;
 
   @IsOptional()
+  @Type(() => Date)
   @IsDate()
-  scheduledAt?: string;
+  scheduledAt?: Date;
 
   @IsArray()
   @IsString({ each: true })

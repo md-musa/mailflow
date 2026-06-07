@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/components/ui/card"
 
 type Props = {
   title: string
-  value: string
+  value: number | string
 }
 
 export default function StatsCard({ title, value }: Props) {
@@ -11,7 +11,7 @@ export default function StatsCard({ title, value }: Props) {
       <CardContent className="px-6">
         <p className="text-sm text-muted-foreground">{title}</p>
 
-        <h3 className="mt-2 text-3xl font-bold">{value}</h3>
+        <h3 className="mt-2 text-3xl font-bold">{typeof value === 'number' ? value.toLocaleString() : value}</h3>
       </CardContent>
     </Card>
   )

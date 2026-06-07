@@ -53,15 +53,16 @@ export default function DashboardPage() {
           <div className="rounded-3xl border bg-white p-6">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
-                <p className="text-md font-medium text-slate-900">Test inbox</p>
+                <p className="text-md font-medium text-slate-900">Test Inbox</p>
+
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Emails are not sent to real mailboxes. They go to a sandbox
-                  inbox (Ethereal Email) for preview and testing.
+                  This system simulates a queue-based email delivery workflow.
+                  Emails are not sent to any external mailbox.
                 </p>
+
                 <p className="mt-2 text-sm text-amber-700">
-                  Warning: Emails are not sending to real mailbox. In
-                  production, this will be replaced with a live email service
-                  (e.g., SMTP or Brevo)
+                  Note: This is a simulation only. In production, a real SMTP
+                  service (e.g., Brevo) will handle email delivery.
                 </p>
               </div>
 

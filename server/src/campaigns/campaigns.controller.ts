@@ -12,6 +12,7 @@ export class CampaignsController {
   @Post()
   create(@Body() createCampaignDto: CreateCampaignDto, @Request() req) {
     const userId = req.user.sub;
+    console.log(createCampaignDto);
     return this.campaignsService.create(createCampaignDto, userId);
   }
 

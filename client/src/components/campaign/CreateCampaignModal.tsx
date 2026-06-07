@@ -34,6 +34,21 @@ export default function CreateCampaignDialog({
   const [scheduledAt, setScheduledAt] = useState("")
   const [selectedGroups, setSelectedGroups] = useState<string[]>([])
 
+  const getMinDatetimeLocal = () => {
+    const d = new Date()
+    const year = d.getFullYear()
+    const month = String(d.getMonth() + 1).padStart(2, "0")
+    const day = String(d.getDate()).padStart(2, "0")
+    const hours = String(d.getHours()).padStart(2, "0")
+    const minutes = String(d.getMinutes()).padStart(2, "0")
+    return `${year}-${month}-${day}T${hours}:${minutes}`
+  }
+
+  const isFutureDateString = (value: string) => {
+    const date = new Date(value)
+    return !isNaN(date.getTime()) && date.getTime() > Date.now()
+  }
+
   const loadGroups = async () => {
     try {
       const result = await fetchGroups()
@@ -65,10 +80,17 @@ export default function CreateCampaignDialog({
     try {
       setLoading(true)
 
+      // Validate scheduledAt is in the future when provided
+      if (scheduledAt && !isFutureDateString(scheduledAt)) {
+        toast.error("Scheduled time must be in the future")
+        setLoading(false)
+        return
+      }
+
       const payload = {
         subject,
         body,
-        scheduledAt: scheduledAt || null,
+        scheduledAt: scheduledAt ? new Date(scheduledAt).toISOString() : null,
         groupIds: selectedGroups,
       }
 
@@ -152,10 +174,11 @@ export default function CreateCampaignDialog({
               </label>
 
               <Input
-                type="datetime-local"
-                value={scheduledAt}
-                onChange={(e) => setScheduledAt(e.target.value)}
-                className="h-11 rounded-xl"
+                  type="datetime-local"
+                  value={scheduledAt}
+                  onChange={(e) => setScheduledAt(e.target.value)}
+                  className="h-11 rounded-xl"
+                  min={getMinDatetimeLocal()}
               />
             </div>
 
