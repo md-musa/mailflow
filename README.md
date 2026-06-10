@@ -6,7 +6,7 @@
 
 **Scalable Queue-Based Email Delivery and Campaign Management System**
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20App-4F46E5?style=for-the-badge)](<!-- ADD CLIENT URL -->)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20App-4F46E5?style=for-the-badge)](https://astonishing-sable-66ee15.netlify.app/)
 
 <!-- [![Demo Video](https://img.shields.io/badge/Demo%20Video-Watch-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](ADD VIDEO URL) -->
 
@@ -35,7 +35,7 @@ MailFlow is a queue-based bulk email delivery system designed to send emails rel
 
 Users can create email campaigns, organize recipients into groups, add custom recipients, and schedule emails for later delivery. Each campaign is broken down into individual email jobs, which are processed asynchronously and tracked through states such as pending, processing, sent, and failed.
 
-The project is built to demonstrate real-world backend engineering concepts including asynchronous processing, queue-based architecture, worker systems, and scalable system design.
+The project applies real-world backend engineering concepts including asynchronous processing, queue-based architecture, and worker systems.
 
 # 2. Features
 
@@ -48,7 +48,7 @@ The project is built to demonstrate real-world backend engineering concepts incl
 | 5   | Background Workers         | Dedicated workers for processing and sending emails                     |
 | 6   | Scheduled Email Delivery   | Schedule campaigns for future execution using delayed jobs              |
 | 7   | Email Status Tracking      | Track email states: pending, processing, sent, failed                   |
-| 8   | Progress Monitoring        | Monitor campaign delivery progress in real time                         |
+| 8   | Progress Monitoring        | Monitor campaign delivery progress with live status updates             |
 | 9   | Retry Mechanism            | Automatic retry handling for failed email deliveries                    |
 | 10  | Scalable Architecture      | Built with queue-based design for handling high-volume email processing |
 
@@ -125,7 +125,7 @@ mailflow/
 - Clone repository and install dependencies:
 
 ```bash
-git clone <YOUR_REPOSITORY_URL>
+git clone https://github.com/md-musa/mailflow.git
 cd mailflow
 cd server
 npm install
@@ -196,7 +196,6 @@ npm run dev
 | PATCH  | /groups/:id | Update group      |
 | DELETE | /groups/:id | Delete group      |
 
-
 ## Campaigns
 
 | Method | Endpoint       | Description          |
@@ -214,13 +213,19 @@ npm run dev
 - Queue (Redis): Railway Redis or Upstash Redis for BullMQ job processing
 - Database: Railway PostgreSQL
 
-# 12. Challenges
+## 12. Challenges
 
-- Designing a queue-based architecture instead of synchronous email delivery
-- Handling recipient deduplication when combining groups and custom emails
-- Managing scheduled email delivery through delayed jobs
-- Tracking delivery progress efficiently for thousands of email jobs
-- Updating campaign progress without introducing unnecessary server load
+- **Synchronous vs asynchronous email processing** — initially considered sending emails
+  directly within the API request, but this blocked the response and failed under load.
+  Redesigning around a BullMQ job queue decoupled the API from the delivery process entirely.
+
+- **Recipient deduplication** — overlapping contacts across groups caused duplicate emails.
+  Solved by collecting all recipients into a Set before job generation, ensuring each
+  address is queued only once.
+
+- **Tracking campaign progress** — progress is calculated by counting completed EmailJob
+  records per campaign on each poll. Keeping these queries efficient as job count grew
+  was the main concern.
 
 # 13. Engineering Highlights
 
