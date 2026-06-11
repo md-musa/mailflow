@@ -18,33 +18,34 @@ export class GroupsService {
     return group;
   }
 
-  async findAll() {
+  async findAll(userId: string) {
     return await this.prisma.group.findMany({
+      where: { createdById: userId },
       include: {
         contacts: true,
       },
     });
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, userId: string) {
     return await this.prisma.group.findUnique({
-      where: { id },
+      where: { id, createdById: userId },
       include: {
         contacts: true,
       },
     });
   }
 
-  async update(id: string, updateGroupDto: UpdateGroupDto) {
+  async update(id: string, updateGroupDto: UpdateGroupDto, userId: string) {
     return await this.prisma.group.update({
-      where: { id },
+      where: { id, createdById: userId },
       data: updateGroupDto,
     });
   }
 
-  async remove(id: string) {
+  async remove(id: string, userId: string) {
     return await this.prisma.group.delete({
-      where: { id },
+      where: { id, createdById: userId },
     });
   }
 }

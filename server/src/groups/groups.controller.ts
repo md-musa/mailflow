@@ -16,22 +16,26 @@ export class GroupsController {
   }
 
   @Get()
-  findAll() {
-    return this.groupsService.findAll();
+  findAll(@Request() req) {
+    const userId = req.user.sub;
+    return this.groupsService.findAll(userId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.groupsService.findOne(id);
+  findOne(@Param('id') id: string, @Request() req) {
+    const userId = req.user.sub;
+    return this.groupsService.findOne(id, userId);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGroupDto: UpdateGroupDto) {
-    return this.groupsService.update(id, updateGroupDto);
+  update(@Param('id') id: string, @Body() updateGroupDto: UpdateGroupDto, @Request() req) {
+    const userId = req.user.sub;
+    return this.groupsService.update(id, updateGroupDto, userId);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.groupsService.remove(id);
+  remove(@Param('id') id: string, @Request() req) {
+    const userId = req.user.sub;
+    return this.groupsService.remove(id, userId);
   }
 }
