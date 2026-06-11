@@ -10,6 +10,10 @@
 
 <!-- [![Demo Video](https://img.shields.io/badge/Demo%20Video-Watch-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](ADD VIDEO URL) -->
 
+<br />
+
+> **Test credentials** &nbsp;|&nbsp; Email: `test.user@gmail.com` &nbsp;&nbsp; Password: `111111`
+
 </div>
 
 ## Table of Contents
