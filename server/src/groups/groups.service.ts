@@ -8,12 +8,15 @@ export class GroupsService {
   constructor(private readonly prisma: PrismaService) { }
 
   async create(createGroupDto: CreateGroupDto, userId: string) {
+    console.log('Creating group with data:', createGroupDto, 'for user:', userId);
     const group = await this.prisma.group.create({
       data: {
         ...createGroupDto,
         createdById: userId,
       },
     });
+
+    console.log('Created group:', group);
 
     return group;
 
