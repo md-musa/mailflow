@@ -16,6 +16,7 @@ import { createCampaign } from "@/api/campaign.api"
 import { fetchGroups } from "@/api/group.api"
 import { Checkbox } from "../ui/checkbox"
 import type { GroupItem } from "@/types/group.type"
+import { Link } from "react-router-dom"
 
 type Props = {
   openCampaignModal: boolean
@@ -150,6 +151,23 @@ export default function CreateCampaignDialog({
             <div className="space-y-3">
               <label className="text-sm font-medium">Select Groups</label>
 
+              {groups.length === 0 && (
+                <div className="flex items-center justify-center space-y-2">
+                  <p className="text-sm text-muted-foreground">
+                    No groups available. Create groups first to add them to a
+                    campaign.
+                  </p>
+                  <Link
+                    to="/groups"
+                    className="text-center text-sm text-blue-600 underline"
+                  >
+                    <Button variant="link" className="p-0">
+                      Create Groups
+                    </Button>
+                  </Link>
+                </div>
+              )}
+
               <div className="grid grid-cols-2 gap-3">
                 {groups.map((group) => (
                   <div
@@ -174,11 +192,11 @@ export default function CreateCampaignDialog({
               </label>
 
               <Input
-                  type="datetime-local"
-                  value={scheduledAt}
-                  onChange={(e) => setScheduledAt(e.target.value)}
-                  className="h-11 rounded-xl"
-                  min={getMinDatetimeLocal()}
+                type="datetime-local"
+                value={scheduledAt}
+                onChange={(e) => setScheduledAt(e.target.value)}
+                className="h-11 rounded-xl"
+                min={getMinDatetimeLocal()}
               />
             </div>
 

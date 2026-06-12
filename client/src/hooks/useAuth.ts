@@ -32,7 +32,7 @@ export const useAuth = () => {
 
     const logout = () => {
         removeAccessToken();
-        navigate('/login');
+        navigate('/auth');
     };
 
     return {
