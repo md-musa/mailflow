@@ -12,7 +12,7 @@
 
 <br />
 
-> **Test credentials** &nbsp;|&nbsp; Email: `test.user@gmail.com` &nbsp;&nbsp; Password: `111111`
+> **Demo credentials** &nbsp;|&nbsp; Email: `test.user@gmail.com` &nbsp;&nbsp; Password: `111111`
 
 </div>
 
